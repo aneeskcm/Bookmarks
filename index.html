@@ -37,7 +37,7 @@
 
         header {
             text-align: center;
-            padding: 5rem 2rem 3rem;
+            padding: 4rem 2rem 2rem;
             position: relative;
         }
 
@@ -57,6 +57,46 @@
             margin: 0 auto;
         }
 
+        /* Search Bar Styles */
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border-radius: 50px;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        #searchInput::placeholder {
+            color: var(--text-secondary);
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -67,6 +107,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
+            margin-top: 3rem;
         }
 
         .card {
@@ -140,9 +181,18 @@
         .btn.gemini:hover { color: #8ab4f8; border-color: rgba(138, 180, 248, 0.4); background: rgba(138, 180, 248, 0.1); }
         .btn.flow:hover { color: #fbbc04; border-color: rgba(251, 188, 4, 0.4); background: rgba(251, 188, 4, 0.1); }
 
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            display: none;
+        }
+
         @media (max-width: 768px) {
             header h1 { font-size: 2.5rem; }
-            .grid { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: 1fr; margin-top: 2rem; }
             .container { padding: 0 1.5rem 3rem; }
         }
     </style>
@@ -152,10 +202,15 @@
     <header>
         <h1>Custom Workflows</h1>
         <p>Your personal collection of custom GPTs, Google Flows, and Gemini Assistants.</p>
+        
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Search for tools, workflows, or apps...">
+        </div>
     </header>
 
     <div class="container">
-        <div class="grid">
+        <div class="grid" id="cardGrid">
             
             <div class="card">
                 <div class="card-header">
@@ -496,9 +551,45 @@
                     <a href="https://gemini.google.com/gem/1swi8oIQhYpaNUWRzIJSg-livKyf5AN-D?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
+            
+            <div id="noResults" class="no-results">
+                <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 1rem; color: rgba(255,255,255,0.2);"></i><br>
+                No workflows found matching your search.
+            </div>
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const cards = document.querySelectorAll('.card');
+            const noResultsMsg = document.getElementById('noResults');
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                let hasVisibleCards = false;
+
+                cards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    // Optional: If you want to search link text too, you can use innerText of the card
+                    
+                    if (title.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                        hasVisibleCards = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (!hasVisibleCards) {
+                    noResultsMsg.style.display = 'block';
+                } else {
+                    noResultsMsg.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
