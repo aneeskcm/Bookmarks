@@ -103,11 +103,27 @@
             padding: 0 2rem 5rem;
         }
 
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--accent-primary);
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
-            margin-top: 3rem;
+            margin-top: 1.5rem;
         }
 
         .card {
@@ -148,6 +164,20 @@
             text-transform: capitalize;
         }
 
+        .prompt-preview {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+
         .links-container {
             display: flex;
             flex-wrap: wrap;
@@ -168,6 +198,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -180,6 +211,7 @@
         .btn.gpt:hover { color: #10a37f; border-color: rgba(16, 163, 127, 0.4); background: rgba(16, 163, 127, 0.1); }
         .btn.gemini:hover { color: #8ab4f8; border-color: rgba(138, 180, 248, 0.4); background: rgba(138, 180, 248, 0.1); }
         .btn.flow:hover { color: #fbbc04; border-color: rgba(251, 188, 4, 0.4); background: rgba(251, 188, 4, 0.1); }
+        .btn.copy:hover { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.1); }
 
         .no-results {
             grid-column: 1 / -1;
@@ -190,9 +222,36 @@
             display: none;
         }
 
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #4ade80;
+            color: #0f172a;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
         @media (max-width: 768px) {
             header h1 { font-size: 2.5rem; }
-            .grid { grid-template-columns: 1fr; margin-top: 2rem; }
+            .grid { grid-template-columns: 1fr; margin-top: 1rem; }
             .container { padding: 0 1.5rem 3rem; }
         }
     </style>
@@ -200,404 +259,433 @@
 <body>
 
     <header>
-        <h1>Custom Workflows</h1>
-        <p>Your personal collection of custom GPTs, Google Flows, and Gemini Assistants.</p>
+        <h1>Workspace Dashboard</h1>
+        <p>Your personal collection of custom GPTs, Google Flows, Prompts, and Bookmarks.</p>
         
+        <!-- Search Bar -->
         <div class="search-container">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Search for tools, workflows, or apps...">
+            <input type="text" id="searchInput" placeholder="Search across all workflows, prompts, and bookmarks...">
         </div>
     </header>
 
     <div class="container">
-        <div class="grid" id="cardGrid">
-            
+        
+        <!-- Section 1: AI Workflows & Assistants -->
+        <h2 class="section-title"><i class="fa-solid fa-robot"></i> Custom Workflows & Assistants</h2>
+        <div class="grid" id="workflowsGrid">
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-network-wired"></i>
-                    <h3>Free Flow Workspace</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-network-wired"></i><h3>Free Flow Workspace</h3></div>
                 <div class="links-container">
                     <a href="https://labs.google/fx/tools/flow/project/b9bd1871-c365-444b-8d2e-be3454aac929" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-newspaper"></i>
-                    <h3>AI Updates</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-newspaper"></i><h3>AI Updates</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69b22fe3fc0c81918ac1083b11894558-ai-updates" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://gemini.google.com/gem/1-Bla7P6HS0zcvvjPsI9n5BmFoizjCkiv?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <h3>Impex Live Image Prompt Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-wand-magic-sparkles"></i><h3>Impex Live Image Prompt Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69aaadd0aa3881919e656ac077256122-impex-live-image-prompt-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1A9pSPiMO0PINp8VQiuCXTluCxIlteX6Z?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-camera-retro"></i>
-                    <h3>Live Image Generator</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-camera-retro"></i><h3>Live Image Generator</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69a71269d3648191a919a96011342adf-live-image-generator" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1UcCnJnQ_qO7Hh0yKQeYgDR1LMdmAPNkP?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-award"></i>
-                    <h3>Memento Generator</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-award"></i><h3>Memento Generator</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69a242525dc88191a8774a5ac118e9c2-memento-generator" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1MiFW23cwCQla2DrcSOc7XLdYXXJ7DJmS?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-swatchbook"></i>
-                    <h3>Impex Brand Guideline Assistant</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-swatchbook"></i><h3>Impex Brand Guideline Assistant</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-699d8530d2048191955f85cba4efa209-impex-brand-guideline-assistant" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1jFvQQs0-EiiQOoJoKj3omKtGPLQHKDd0?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-images"></i>
-                    <h3>Image Stock Extracter</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-images"></i><h3>Image Stock Extracter</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-6999e0b5dcac8191b992fdd7026b137b-image-stock-extracter" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/b9bd1871-c365-444b-8d2e-be3454aac929" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1EIUH3bzVwoMxbVJ2nXOFVVS02vuWv12D?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-brain"></i>
-                    <h3>Impex Mnemonic Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-brain"></i><h3>Impex Mnemonic Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-6992e65d272c8191b573da6d0bb5a117-impex-mnemonic-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/19Bn6dxLQSC2YlfpgMvYSj1OyHeUD3T1n?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-file-invoice"></i>
-                    <h3>Impex Flyer Generator</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-file-invoice"></i><h3>Impex Flyer Generator</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-6990706d25808191b01d564efbfd2799-impex-flyer-generator" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1pZrWb-ygLcyxyj9nC-iojzrAGLs5DP0U?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-star"></i>
-                    <h3>Employee of the Month Impex</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-star"></i><h3>Employee of the Month Impex</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69802911dfa08191811ffa0dc035108f-star-of-the-month-impex" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1Bn0kUeNfTfzwplqlRN5WHbWqnU0N3o7-?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <h3>Impex Ecom Content GPT</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-cart-shopping"></i><h3>Impex Ecom Content GPT</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-697d973082f08191bbb5f89093c07ddc-impex-ecom-content-gpt" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/14gUQKXRsT0z1Diq0r53ajxYwiBIHaKDT?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-clapperboard"></i>
-                    <h3>Pinto Reel Cover</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-clapperboard"></i><h3>Pinto Reel Cover</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/c/6977789b-f920-8320-8092-88812f43396e" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/ca50edec-18ee-48b5-a3b4-d653c0cc11bb" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1xRxgXcOsUML_3S_ELwDwscg9D2FjwGmt?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-icons"></i>
-                    <h3>Impex Icon Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-icons"></i><h3>Impex Icon Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69bbd0f5ee508191b2f48e0c138a474d-impex-icon-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1bp5RMHhvMk7m8pTTv6JlRWRXV3t8RNma?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-id-badge"></i>
-                    <h3>Impex Badge Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-id-badge"></i><h3>Impex Badge Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69c4f31dfb808191868115198049d140-impex-badge-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1QiFSfzI8lB2gquAmTA4lnqWUmt_kO6hU?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-image-portrait"></i>
-                    <h3>Impex Poster Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-image-portrait"></i><h3>Impex Poster Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69ccb1d282e88191b00a9f66a29b0fb6-impex-poster-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1tk6bNVOdSeKeBxgeFyng-w-ampM1MkR-?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-print"></i>
-                    <h3>Pinto Poster Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-print"></i><h3>Pinto Poster Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69c7f35091d88191b22c45dec5f25481-pinto-poster-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/ca50edec-18ee-48b5-a3b4-d653c0cc11bb" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1xMLWTo6zezdgZlEaq7bUTbTxngIJv4ZR?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-brands fa-figma"></i>
-                    <h3>Figma Plugin Developer</h3>
-                </div>
+                <div class="card-header"><i class="fa-brands fa-figma"></i><h3>Figma Plugin Developer</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69dbc9098dd88191825a04aa42ee0397-figma-plugin-developer" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/94f51370-1e20-4d38-9c43-e08d16602271" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1Fyq5ecY9mgnkp3skhZVZ14W89eAxGkUg?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-wand-magic"></i>
-                    <h3>Product Retouch Prompt Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-wand-magic"></i><h3>Product Retouch Prompt Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69d5f094ff188191b597e8c3b07826b7-product-retouch-prompt-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1CwUumiyybMMfpk20esLkOUc8kuO0GyZL?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-arrows-rotate"></i>
-                    <h3>Replace Product in Reference</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-arrows-rotate"></i><h3>Replace Product in Reference</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69d5f8cb9a04819196c658ae8fc8e040-replace-product-in-reference" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1PYgt3e2nC2LmhEPWJz1f6ayVWmoONP1j?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-photo-film"></i>
-                    <h3>Gallery Image with Reference</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-photo-film"></i><h3>Gallery Image with Reference</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69d5e9a4a2148191a2994017f2e25eef-gallery-image-with-reference" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1KRGvugxOqEiGlWQLEVsH7Okp5-BkW7vp?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-flask"></i>
-                    <h3>Exim Design Labs</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-flask"></i><h3>Exim Design Labs</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69d258c5ddc48191a490ffddfc1a5cc5-exim-design-labs" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/79260967-ae72-4b21-8641-0349cdae82f1" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/18Ybziw64kpu6pa6KVKXggs_5bbLz0qET?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-helmet-safety"></i>
-                    <h3>Wellstruct Build Solution Poster</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-helmet-safety"></i><h3>Wellstruct Build Solution Poster</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69ce3519386c819181c02863e54104a5-wellstruct-build-solution-poster" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/74c5fd3e-5eee-412a-9b0c-42b74253d68f" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1vElDS9Y_Okn8DuNRNE-16jwjLV0Hqq9z?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-list-check"></i>
-                    <h3>Impex Features Image Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-list-check"></i><h3>Impex Features Image Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69f080047c188191aadf6745a62ad27a-features-image-maker-impex" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1sZukynhFyLechCU6en4BSvnG-fgAyc8H?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-pen-nib"></i>
-                    <h3>Logo Maker - Logo Generator</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-pen-nib"></i><h3>Logo Maker - Logo Generator</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-69fd557620ec8191bc9720d6af3739a3-logo-generator" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/d9e30b98-0d96-4023-9f82-b00128f254bb" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1BKFDiWyTBbJnmD4-2d0aS_nR0nP5lIwR?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-file-word"></i>
-                    <h3>OCR Tool</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-file-word"></i><h3>OCR Tool</h3></div>
                 <div class="links-container">
                     <a href="https://gemini.google.com/gem/17dnd-xXeQhRY2zU-rs9SaMMVv2A14zTr?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-bezier-curve"></i>
-                    <h3>Adobe Illustrator Script</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-bezier-curve"></i><h3>Adobe Illustrator Script</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-6a05438d7e3081918e43cfc0bb6c2944-adobe-illustrator-script-generator" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/94f51370-1e20-4d38-9c43-e08d16602271" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1C4iAdZ30lsD_ox-YpcRZ66qIGlKfJ5p7?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <h3>ECOMERCE GALLARY IMAGE ANALYZE</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-magnifying-glass"></i><h3>ECOMERCE GALLARY IMAGE ANALYZE</h3></div>
                 <div class="links-container">
                     <a href="https://gemini.google.com/gem/1vwLEm1pv5qUjSvqVldGbVHzLFgcTBnNX?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <h3>Ecommerce Gallery Image Content Strategist</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-chart-line"></i><h3>Ecommerce Gallery Image Content Strategist</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-6a0185c29474819184fd6ebc153d40e1-ecommerce-gallery-image-content-strategist" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://labs.google/fx/tools/flow/project/6607dc76-23c6-41c4-a5ad-fcd16a725034" class="btn flow" target="_blank"><i class="fa-solid fa-bolt"></i> Flow</a>
                     <a href="https://gemini.google.com/gem/1SO721s1OP_q0zFlgvkUzJI02aPsCxpjd?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-terminal"></i>
-                    <h3>GPT/GEM Instruction Maker</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-terminal"></i><h3>GPT/GEM Instruction Maker</h3></div>
                 <div class="links-container">
                     <a href="https://chatgpt.com/g/g-6a0412c9e1f88191bf5df5fe58450a20-gpt-gem-instruction-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
                     <a href="https://gemini.google.com/gem/1swi8oIQhYpaNUWRzIJSg-livKyf5AN-D?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-            
             <div class="card">
-                <div class="card-header">
-                    <i class="fa-solid fa-circle-question"></i>
-                    <h3>Doubt Solver AI</h3>
-                </div>
+                <div class="card-header"><i class="fa-solid fa-circle-question"></i><h3>Doubt Solver AI</h3></div>
                 <div class="links-container">
                     <a href="https://gemini.google.com/gem/18P7GdQY0rXANvYWCvOsEZKZTtz_sn_q0?usp=sharing" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
                 </div>
             </div>
-            
-            <div id="noResults" class="no-results">
-                <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 1rem; color: rgba(255,255,255,0.2);"></i><br>
-                No workflows found matching your search.
+            <!-- New Assistant Cards -->
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-clapperboard"></i><h3>Reel Cover Content Maker</h3></div>
+                <div class="links-container">
+                    <a href="https://gemini.google.com/gem/71e30b88be6d" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
+                </div>
             </div>
-
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-child-reaching"></i><h3>Story Maker for Kids</h3></div>
+                <div class="links-container">
+                    <a href="https://gemini.google.com/gem/03a5bcc40d3a" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-film"></i><h3>Movie Explainer</h3></div>
+                <div class="links-container">
+                    <a href="https://gemini.google.com/gem/59bbdd0e4258" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-book-quran"></i><h3>Islam Scholar</h3></div>
+                <div class="links-container">
+                    <a href="https://gemini.google.com/gem/cb2a7ed7aebc" class="btn gemini" target="_blank"><i class="fa-solid fa-sparkles"></i> Gemini</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-object-group"></i><h3>Poster Maker with Reference</h3></div>
+                <div class="links-container">
+                    <a href="https://chatgpt.com/g/g-6a96ed820c208191a8872f856647def3-poster-maker-with-the-reference" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fa-solid fa-hashtag"></i><h3>Social Media Poster for Products</h3></div>
+                <div class="links-container">
+                    <a href="https://chatgpt.com/g/g-6aa929b6416c8191bcc6c1b7ab78310b-social-media-poster-maker" class="btn gpt" target="_blank"><i class="fa-solid fa-robot"></i> ChatGPT</a>
+                </div>
+            </div>
         </div>
+
+        <!-- Section 2: Prompt Collections -->
+        <h2 class="section-title"><i class="fa-solid fa-pen-nib"></i> Prompt Collections</h2>
+        <div class="grid" id="promptsGrid">
+            <!-- Dynamic Prompt Cards injected by JS -->
+        </div>
+
+        <!-- Section 3: Link Bookmarks -->
+        <h2 class="section-title"><i class="fa-solid fa-bookmark"></i> Link Bookmarks</h2>
+        <div class="grid" id="bookmarksGrid">
+            <!-- Dynamic Bookmark Cards injected by JS -->
+        </div>
+
+        <div id="noResults" class="no-results">
+            <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 1rem; color: rgba(255,255,255,0.2);"></i><br>
+            No workflows, prompts, or bookmarks found matching your search.
+        </div>
+
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast">Copied!</div>
+
+    <!-- Script for Dynamic Data & Search -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('searchInput');
+        // --- DATA FROM EXCEL FILES ---
+        const promptsData = [{"title":"Concept 1","content":"Create a premium, highly creative commercial advertising poster using the attached Reference Poster as the primary visual and storytelling reference, and the attached Product Image as the exact product to be advertised. Carefully study the reference poster’s overall composition, visual hierarchy, camera angle, perspective, framing, subject placement, character interaction, storytelling concept, mood, lighting, colour balance, depth, environment, and advertising style, then creatively reinterpret that visual concept specifically for the attached product. Do NOT simply copy the reference poster; transform its idea into a fresh, original advertisement that naturally"},{"title":"ChatGPT 50 Power Commands Refined","content":"https://docs.google.com/document/d/1-Q5zuiw1y9PehxKHP952zibfJeiAqYqoXzMuMtDjdY8/edit?tab=t.0"},{"title":"Concept 3","content":"[TYPE YOUR SUBJECT / OBJECT HERE]\n\nCreate a visually stunning, ultra-detailed, hyper-realistic fine-art image featuring the specified subject as the primary visual focus. Present it in a highly creative, visually striking way while preserving its natural identity, recognizable characteristics, structure, proportions, and essential details. Use an extremely rich, vibrant, highly saturated color palette with striking combinations of electric blue, cyan, emerald green, turquoise, violet, magenta, crimson, orange, yellow, and deep gold, while maintaining sophisticated color harmony. Use a pure deep black or near-black background with dramatic separation between the subject and background, creating a luxurious high-contrast studio aesthetic. Emphasize extraordinary micro-detail, realistic surface texture, intricate patterns, fine fibers, tiny structures, subtle imperfections, glossy highlights, rich tonal depth, and photorealistic material rendering. Use cinematic studio lighting with strong directional highlights, subtle rim lighting, controlled specular reflections, deep shadows, luminous color separation, and dramatic edge definition. Compose the subject as a powerful close-up, macro, extreme macro, or frame-filling visual depending on what best suits the subject, with an intentional photographic composition and strong visual impact. Ultra-sharp focus on the most important details, realistic depth of field, premium commercial photography quality, HDR, exceptional dynamic range, rich blacks, brilliant highlights, vivid colors, high contrast, sophisticated cinematic color grading, photorealistic rendering, 8K-level detail, extremely clean image quality, visually mesmerizing, luxurious, dramatic, exotic, surreal yet believable. No text, no typography, no logos, no watermark, no border, no decorative graphic elements."},{"title":"Concept 4","content":"Edit this photo into a cinematic The Lord of the Rings style while preserving the original composition, subject, pose, clothing, facial features, expression, camera angle, perspective, framing, and every background element exactly. Transform the lighting into a soft sunrise from the upper left with natural god rays, subtle volumetric lighting, gentle morning mist, and a soft cinematic lens flare. Apply a rich, natural color grade with deep greens, warm golden-hour highlights, a clean blue sky, accurate skin tones, and soft neutral shadows without an orange or yellow cast. Enhance dynamic range, local contrast, texture, and detail to an iPhone 17 Pro Smart HDR look while keeping it fully photorealistic. Create an immersive fantasy atmosphere inspired by The Lord of the Rings that still looks like a genuine sunrise photograph, not AI-generated artwork."},{"title":"Concept 5","content":"Transform the referenced image into an Arcane-inspired painterly cinematic animated frame, while strictly preserving the original image content. Keep the same subject, same pose, same action, same environment, same composition, same framing, same perspective, same camera angle, and same emotional moment. Do not redesign the scene or reinterpret it compositionally — only transform the rendering language and art direction. Render the image with a premium painterly 3D animation aesthetic, combining handpainted concept-art textures with dimensional cinematic form. Use stylized yet believable anatomy, expressive eyes, defined brows, sculpted facial planes, painted skin shading, and emotionally rich facial rendering. Hair should be rendered in large graphic masses with selective strand detail, controlled highlights, and elegant silhouette design. Materials should feel stylized and art-directed: painterly leather, illustrated metal, worn fabric, atmospheric surfaces, and softly simplified background depth. Use dramatic cinematic lighting with motivated light sources, controlled shadows, soft rim light, subtle bloom, atmospheric haze, and color-scripted illumination. Let the palette feel carefully curated and moody, with restrained base tones and selective teal, cyan, blue, violet, magenta, amber, or crimson accents depending on the original image mood. Shadows should be rich and colorized, highlights focused and painterly, and the entire image should feel like a high-end animated still with emotional intensity and handcrafted polish. The final result must feel like the exact same image translated into the visual language of Arcane — not anime, not Disney, not Pixar, not generic CGI, not flat cel shading, and not photoreal live action."},{"title":"Concept 6","content":"Please create a image and Ultra-premium professional image enhancement. Transform the uploaded low-quality, blurry image into extreme high-detail cinematic quality. Preserve 100% original identity, face structure, expression, pose, clothing, accessories, background, framing, and composition. Do NOT alter, redesign, replace, or add anything. Recover micro-details: sharp facial features natural skin texture visible pores realistic hair strands crisp eyes clean refined edges High-contrast clarity, deep depth, and balanced cinematic lighting. Poster-grade realism with dramatic but accurate detail. Output in 8K resolution, ProRes quality, studio-level sharpness. Photorealistic textures only. True-to-source enhancement only. Keep everything exactly the same — only enhance quality."},{"title":"Concept 7","content":"Transform this image into a breathtaking ultra-realistic foggy forest masterpiece. Add dense natural white fog covering the entire environment, creating a mysterious and cinematic atmosphere. Apply rich forest-inspired color grading with deep emerald green, dark teal, moss green, and earthy brown tones. Enhance the trees, foliage, and background elements to resemble a lush enchanted forest hidden in the mist. Introduce soft volumetric light rays subtly penetrating through the fog, creating depth and realism. Increase overall image quality to ultra-high-definition 4K resolution with razor-sharp details, HDR enhancement, realistic textures, balanced contrast, and natural color harmony. Improve shadows, highlights, and dynamic range while maintaining a realistic appearance. Add a moody woodland aesthetic, drermy fog layers, atmospheric perspective, and professional cinemate photography grading. The final result should look like a premium DSLR forest photograph captured during a cold misty"},{"title":"Pinterest AI Ad Hack","content":"Got it 👍\nHere is the cleanest, shortest version — only core steps, no extras, no explanations.\n\n\n---\n\nPinterest + AI Product Poster Hack (Ultra-Simple Steps)\n\n1. Open Pinterest\nSearch for creative ad poster.\nDownload any visually strong poster.\n\n\n2. Open ChatGPT or Gemini\nUpload the Pinterest poster and your product images.\n\n\n3. Use This One Prompt\n\n> “Explain the suitability of this for (product name), and include relevant captions accompanied by creative poster prompts with highly detailed descriptions.”\n\n\n\n\n4. Change Only the Product Name\nUse a specific product name (Air Fryer, LED TV, Pressure Cooker).\n\n\n5. Generate the Poster Image (Optional)\nPaste the AI-generated poster prompt into Google Whisk and generate the image.\n\n\n\n\n---\n\nThat’s the full hack.\nNo thinking.\nNo extra steps."},{"title":"Cinematic Close-up AI Prompt","content":"Use the uploaded photo as exact face and hair reference. Maintain the same person and identical facial structure.\n\nHyper-realistic close-up portrait, both eyes in sharp focus, soft natural smile, neatly styled wavy hair with minimal strands in front. Ultra-realistic skin texture, warm golden café lighting, soft bokeh background, shallow depth of field.\n\nDSLR look, 85mm lens, f/1.8, cinematic, film-still quality, no beauty filter, no face distortion"},{"title":"AI Product Photoshoot Hack","content":"Use the uploaded product image exactly as it is. Do NOT change the product’s angle, rotation, perspective, size, or position in any way. Keep the product occupying approximately 70% of the frame as the main hero. Preserve all original proportions, edges, logos, textures, and colors without distortion.\n\nPlace the product in a realistic, bright daytime lifestyle environment that naturally matches the product category. Use soft natural daylight, clean shadows, and a fresh, airy atmosphere. Add minimal, relevant props only—objects that clearly support the product’s real-world use (no random or decorative items). Props must feel practical, premium, and naturally placed, without touching or overlapping the product.\n\nEnsure the background is realistic, modern, and uncluttered, with shallow depth of field so the product remains the sharpest and most dominant element. Maintain professional commercial photography quality: balanced exposure, accurate color tone, gentle contrast, crisp details, and a premium finish.\n\nNo text, no watermarks, no extra branding, no people unless absolutely necessary. The final image should look like a high-end lifestyle product photoshoot captured with a professional camera on a bright day."},{"title":"Tight Frame Lifestyle Product Prompt (RUMI)","content":"make a realistic creative web banner for this [Product]. make real-life. lifestyle image. . crop to the product image. focus on the product. in a room related to the product . zoom into the product. day light.  no person. add few props related to the product. don't change the product. use exact products attached. exact structure of the product should be used. tight frame. 70% of the image should contain the product. studio lighting on the product."},{"title":"Tight Frame Lifestyle Product Prompt (RUMI) - with human","content":"make a realistic creative web banner for this [Product]. make real-life. lifestyle image. . crop to the product image. focus on the product. in a room related to the product . zoom into the product. day light.  make a person using or interacting with the product. add few props related to the product. don't change the product. use exact products attached. exact structure of the product should be used. tight frame. 70% of the image should contain the product. studio lighting on the product."},{"title":"HD to 4K: Sony A1 Portrait","content":"Enhance the portrait while strictly preserving the subject’s identity with accurate facial geometry. Do not change their expression or face shape. Only allow subtle feature cleanup without altering who they are.\n\nKeep the exact same background from the reference image. No replacements, no changes, no new objects, no layout shifts. The environment must look identical.\n\nThe image must be recreated as if it was shot on a Sony A1, using an 85mm f1.4 lens, at f1.6, ISO 100, 1/200 shutter speed, cinematic shallow depth of field, perfect facial focus, and an editorial-neutral color profile.\n\nThis Sony A1 + 85mm f1.4 setup is mandatory. The final image must clearly look like premium full-frame Sony A1 quality.\n\nLighting must match the exact direction, angle, and mood of the reference photo. Upgrade the lighting into a cinematic, subject-focused style: soft directional light, warm highlights, cool shadows, deeper contrast, expanded dynamic range, micro-contrast boost, smooth gradations, and zero harsh shadows.\n\nMaintain neutral premium color tone, cinematic contrast curve, natural saturation, real skin texture (not plastic), and subtle film grain. No fake glow, no runway lighting, no oversmoothing.\n\nRender in 4K resolution, 10-bit color, cinematic editorial style, premium clarity, portrait crop, and keep the original environmental vibe untouched.\n\nRe-render the subject with improved realism, depth, texture, and lighting while keeping identity and background fully preserved.\n\nNEGATIVE INSTRUCTIONS:\n\nNo new background.\n\nNo background change.\n\nNo overly dramatic lighting.\n\nNo face morphing.\n\nNo fake glow.\n\nNo flat lighting.\n\nNo over-smooth skin."},{"title":"Product-Shaped Glass Building Hack","content":"A gigantic {BRAND NAME} {PRODUCT TYPE} transformed into a tall transparer8/9 crystal-glass building, designed in the exact shape of the real product so people instantly recognize it.\n\nThe building must keep the true product structure: clean edges, correct proportions, and a premium architectural look - NOT a random shape or altered style.\n\nThe entire structure is 100% transparent crystal with soft {BRAND COLORS} reflections and subtle iridescent highlights.\n\nOn the front of the product-building, add a large glowing {BRAND LOGO} mounted like real luxury flagship branding.\n\nCamera is zoomed enough to show the product shape clearly along with the visible interior inside.\n\nInside the transparent product-building (no bottom platform, no extra external room), create a complete {BRAND NAME} showroom built entirely inside the\n\nproduct interior:\n\n- elegant counters arranged to fit the product shape\n\n- premium display trays or product stands\n\n- shelves showing the brand's main items\n\n- polished marble or glossy flooring with brand-colored reflections\n\n- soft LED ambient lighting across the inner walls\n\n- spotlights highlighting products\n\n- realistic, proportionate customers browsing inside\n\n- clean, premium layout that fits ONLY inside the product shape\n\n- NO extra outside area, NO bottom extension, NO external rooms.\n\nThe product-building stands tall on a rooftop in bright daylight with soft shadows and a pastel sky.\n\nOverall style: unmistakable product architecture, transparent crystal aestheti. luxury showroom inside, ultra-realistic, cinematic, viral-quality visual."},{"title":"Viral Hook Generator Template","content":"I want to create scroll stopping hook generator specifically designed to my niche.\nMy niche is [insert niche].\nCreate a hook matrix that includes pattern interrupts that forces people to stop, psychological triggers that demand engagement, curiosity gap that keeps viewer watching, power phrases that drive action, hook structures proven to go viral.\nFormat this as a swipe file with ready to use templates that I can plug my ideas into."},{"title":"Real Person to 3D Disney Character","content":"Transform the attached character into a high-quality 3D Disney-style character while STRICTLY preserving the original face identity.\n\nMaintain the same facial structure, bone proportions, eye shape, nose size, lip shape, jawline, cheekbones, skin tone, facial symmetry, and unique facial details from the original image.\n\nNo face redesign, no beautification, no generic Disney face — the character must be instantly recognizable as the same person, only translated into a Disney/Pixar 3D style.\n\nStyle inspired by modern Disney & Pixar animation — soft rounded geometry, expressive eyes (same shape and distance), smooth cinematic skin shading, subtle stylization without distortion.\n\nRendered in cinematic 3D, global illumination, soft studio lighting, shallow depth of field, ultra-clean textures, premium feature-film quality (Pixar / Disney level).\n\nBackground: neutral studio or soft pastel gradient.\n\nUltra-high resolution, sharp focus, professional animation-movie render."},{"title":"Concept 18","content":"Hyper-realistic Stranger Things Upside Down version of the [Location], [Camera] composition, the iconic red domes covered in twisted black and red organic vines, stormy blood-red sky, intense red lightning cracking across the clouds, dark smoke-grey fog, glowing red rifts in the hotel windows, wet reflective roads, deep shadows, eerie horror atmosphere, apocalyptic mood, ultra-detailed, photorealistic 2K, dramatic lighting, volumetric fog, dark red color grading."},{"title":"Concept 19","content":"Create a technical drawing of this photo, make it [visionary]"},{"title":"Concept 20","content":"Create a 3D model from the provided 2D engineering drawing. Create front, side, top, and back views in isometric perspective, white background."},{"title":"Concept 21","content":"[Create a professional Hollywood\nblockbuster movie poster design\nfeaturing all 8 superheroes from the\nprovided images. Design requirements:\u2028\u2028\nMAIN COMPOSITION:\u2028\u2028\n- Arrange all 8 characters in a dynamic,\nheroic group composition with depth\nand hierarchy\u2028\n- Central hero(es) in foreground, ADWILS\npositioned at various depths creating\nlayered effect\u2028\n- Dramatic upward-looking angle\n(worm’s eye view) to emphasize power\nand scale\u2028\n- Epic sky or dramatic background\n(stormy clouds, city skyline, or cosmic\nspace)\u2028\n- Cinematic lighting with strong\nhighlights and shadows, rim lighting on\ncharacters]"},{"title":"Concept 22","content":"A photorealistic close-up\nphotograph of a [NAME OF\nFOOD] made entirely out of\nknitted wool yarn. Show the\nfuzzy texture of the wool\nstrands, the stitching\npatterns, and realistic\nlighting.\""},{"title":"Concept 23","content":"Create an amazing\nYouTube thumbnail in a\nbaby style based on the\ntheme 'Sora 2 AI\nAnimation"},{"title":"Concept 24","content":"Turn this image into an ultra-precise figure style\u2028\nand create a product introduction page design.\u2028\nThe product name is \"Broken Heart Girls.\"\u2028\nIt's a 1/7 scale figure.\u2028\nThe manufacturer name is \"TENNEN.\"\u2028\nThe logo is a rounded blue square with the text\nTENNEN\u2028\n\"TEN\" on one line, left-aligned with \"NEN\" on the\nnext line\u2028\nMaximized placement within the rounded blue\nsquare.\u2028\nInclude partial close-up diagrams and such to\nmake it look like a proper product introduction\u2028\nDesign it to look visually appealing and\nprofessional.\u2028\nMake \"Broken Heart Girls\" logo-like as well.\u2028\nMake it look like a product introduction page.\u2028\nScheduled for release in winter 2025\u2028\nPrototype creation: Tennnen"},{"title":"Concept 25","content":"Transform a simple flat\nvector logo into a soft,\n3D fluffy object. Use\nthe exact colors. The\nshape is fully covered\nin fur, with\nhyperrealistic hair\ntexture and soft\nshadows. The object is\ncentered on a clean,\nlight gray background\nand floats gently in\nspace. The style is\nsurreal, tactile, and\nmodern, evoking a\nsense of comfort and\nplayfulness. Studio\nlighting, highresolution\nrender."},{"title":"Concept 26","content":"Create an image of the different\npatterns that makes up this shoe. lay\nthem out individually against a neutral\nsurface"}];
+        
+        const bookmarksData = [{"title":"Actor Studio","url":"https://promli.com/en/app/create"},{"title":"NORDY IMAGE ENHANCER","url":"https://nordy.ai/comfyui/?flow=673faccc3c269af1b336c66b"},{"title":"AI BOODBOARD","url":"https://mixboard.google.com/projects"},{"title":"ILLEGAL AI","url":"https://venice.ai/chat"},{"title":"NANO BANANANA PROMPTS","url":"https://www.bananaprompts.xyz/explore"},{"title":"NOTEBOOK LM","url":"https://notebooklm.google.com/"},{"title":"BUILDING APP UI","url":"https://stitch.withgoogle.com/"},{"title":"WHISK - IMAGE GEN","url":"https://labs.google/fx/tools/whisk/project"},{"title":"FUN AI BY GOOGLE (ART)","url":"https://artsandculture.google.com/lab"},{"title":"AI EXPERIMENTS","url":"https://labs.google/experiments"},{"title":"AI-powered tools for rappers, writers and wordsmiths.","url":"https://textfx.withgoogle.com/"},{"title":"Google's Mobile and Web App Development Platform","url":"https://studio.firebase.google.com/"},{"title":"Transform your content into engaging AI\u2011generated audio discussions","url":"https://illuminate.google.com/"},{"title":"Google Vids: AI-Powered Video Creator and Editor","url":"https://docs.google.com/videos/u/0/?pli=1"},{"title":"IMAGE GEN","url":"https://firefly.adobe.com/"},{"title":"AI CHAT","url":"https://claude.ai/new"},{"title":"AI STUDIO","url":"Google AI Studio"},{"title":"ALL AI IN ONE","url":"https://lmarena.ai/"},{"title":"AI PHOTO CUT","url":"Photoroom"},{"title":"AI IMAGES SEARCH","url":"https://lexica.art/"},{"title":"AI LOGO MAKER","url":"https://looka.com/"},{"title":"https://aneeskcm.github.io/Bookmarks/","url":"https://gemini.google.com/app/3efd06b3f5a77de6"},{"title":"CHATGPT GPTS","url":"FREE FLOW"},{"title":"PINTO REEL COVER","url":"https://chatgpt.com/c/6977789b-f920-8320-8092-88812f43396e"},{"title":"PINTO ASSETS","url":"https://drive.google.com/drive/folders/1OHc_JtUlxYuImTfGIhQzf-VKQiSv-3TZ"},{"title":"PINTO ITEMS","url":"https://drive.google.com/drive/folders/1i70h59sZ7UzH2hfEApF8QQCsXY2qqXmf"},{"title":"ADWILS","url":"ask_Management_System(Anees)2026 - Google Sheets"},{"title":"PINTO ASSETS CALLIGRAPHY","url":"https://drive.google.com/drive/folders/1OHc_JtUlxYuImTfGIhQzf-VKQiSv-3TZ"},{"title":"NAHDI MANTHI STOCKS","url":"https://drive.google.com/drive/folders/1MV8MdAd2LuTYjtZw4cnYfcm-tHkseYbR"},{"title":"ANEES - Google Drive","url":"https://drive.google.com/drive/u/1/folders/13dDM_srKglu-N3RkMZTfFDV-Tt2MrKG1"},{"title":"ALL KCM LOGOS - Google Drive","url":"https://drive.google.com/drive/u/1/folders/1UaoE6DFvgfn7nx4e5ybEwbZkwI5ieubX"},{"title":"TV BASE BACKGROUNDS","url":"https://in.pinterest.com/pin/5136987070418600/"},{"title":"MD PHOTO","url":"https://labs.google/fx/tools/whisk/project/16c246d4-e140-4a09-b7d4-0aff8a2ff334"},{"title":"pinto reel assets ai","url":"https://labs.google/fx/tools/whisk/project/54b4dbe7-e1ae-4faf-8734-11aee81f10c4"},{"title":"GAME SOFTWARE","url":"https://ankergames.net/"},{"title":"COMPRESS PDF TO ANY SIZE","url":"https://pdf.pi7.org/compress-pdf-to-2mb"},{"title":"MOVIE","url":"https://fmovies-co.net/home"},{"title":"MOVIE WEBSITES","url":"https://fmhy.pages.dev/"},{"title":"Browse Latest Movies & TV Shows | StreamIMDB","url":"https://streamimdb.ru/"},{"title":"Cinema in Radio","url":"https://radio.hiran.in/"},{"title":"FOR FACTORY A+ CONTENT","url":"https://www.amazon.com/Ceramic-Nonstick-Cookware-Set-Scratch-Resistant/dp/B0743TXF76/?th=1"},{"title":"ADOBE STOCKS","url":"https://new.express.adobe.com/id/urn:aaid:sc:AP:c34e9278-c86e-4e87-b8d2-2d6f32ea2417"},{"title":"Envato App","url":"https://app.envato.com/"},{"title":"Explore AI tools | Freepik AI","url":"https://www.freepik.com/app"},{"title":"[Login] Ix-Connect","url":"http://192.168.1.23:114/User/Login"},{"title":"Voyon Folks","url":"https://impexvoyonfolks.azurewebsites.net/UserLogin/Login?ReturnUrl=%2FIndex"},{"title":"Telegram","url":"https://web.telegram.org/a/"},{"title":"Gmail","url":"https://mail.google.com/mail/u/0/#calls"},{"title":"(17) WhatsApp","url":"https://web.whatsapp.com/"},{"title":"Youtube","url":"https://www.youtube.com/"},{"title":"Instagram","url":"https://www.instagram.com/"},{"title":"Facebook","url":"https://www.facebook.com/"},{"title":"add QR in ms office","url":"ctrl+f9 -> displaybarcode \"google.com\" qr \\3 -> f9"},{"title":"3dsvg \u2014 The easiest way to turn SVGs into 3D","url":"https://3dsvg.design/"},{"title":"Word trick","url":"=rand(5,2) : lorem ipsum for word"},{"title":"Myinstants | The largest instant sound buttons website in United States!","url":"https://www.myinstants.com/en/index/us/"},{"title":"all apps in pc","url":"shell:appsfolder"},{"title":"Rec0deD:88 | Play Retro Games Online","url":"https://rec0ded88.com/"},{"title":"Retro Games - Play Free Classic Retro Games / Emulator Games Online","url":"https://classicgamezone.com/"},{"title":"Epstein Exposed - The Most Comprehensive Epstein Files Database","url":"https://epsteinexposed.com/"},{"title":"Wall art generator - Rasterbator : FOR ONAM","url":"https://rasterbator.net/"},{"title":"WINDOWS93","url":"https://windows93.net/"},{"title":"Zperiod: Interactive Periodic Table (118 Elements, 3D Atom Models)","url":"https://zperiod.app/"},{"title":"Free web proxy - browse fast & anonymously","url":"https://proxyium.com/"},{"title":"tvgarden","url":"https://tvgarden.world/"},{"title":"Terraink: Free Map Poster & Wallpaper Creator","url":"https://terraink.app/"},{"title":"Fake Text Message Generator | McStumble Tools","url":"https://www.mcstumble.com/tools/fake-text-message"},{"title":"There's nothing to watch","url":"https://nothing-to-watch.port80.ch/"},{"title":"The Quenq Apps - Digital Artifacts & Web Preservation","url":"https://quenq.com/apps/"},{"title":"EAN-13 free barcode generator with bar width reduction (vector PDF, AI, EPS)","url":"https://www.free-barcode-generator.net/ean-13/"},{"title":"Team Strength Analysis","url":"https://chatgpt.com/c/6a3b6435-0d58-83ee-9148-a40ba0532726"},{"title":"ctrl+shif+alt+r","url":"whatsapp voice record"},{"title":"Attendance Dashboard","url":"https://impex-attendence-checker.vercel.app/"}];
+
+        // Utility: Escape HTML properly for data insertion
+        const escapeHTML = str => str.replace(/[&<>'"]/g, 
+            tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag])
+        );
+
+        // Render Prompt Collections
+        const promptsGrid = document.getElementById('promptsGrid');
+        promptsData.forEach(prompt => {
+            const safeContent = escapeHTML(prompt.content);
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <h3>${escapeHTML(prompt.title)}</h3>
+                </div>
+                <div class="prompt-preview">${safeContent}</div>
+                <div class="links-container">
+                    <button class="btn copy" onclick="copyText(this, \`${safeContent.replace(/`/g, '\\`')}\`)"><i class="fa-regular fa-copy"></i> Copy Prompt</button>
+                </div>
+            `;
+            promptsGrid.appendChild(card);
+        });
+
+        // Helper to get correct FontAwesome Icon based on URL
+        function getIcon(url) {
+            let u = url.toLowerCase();
+            if (u.includes('youtube.com')) return 'fa-youtube';
+            if (u.includes('github.com')) return 'fa-github';
+            if (u.includes('drive.google')) return 'fa-google-drive';
+            if (u.includes('whatsapp.com')) return 'fa-whatsapp';
+            if (u.includes('instagram.com')) return 'fa-instagram';
+            if (u.includes('facebook.com')) return 'fa-facebook';
+            if (u.includes('amazon.com')) return 'fa-amazon';
+            if (u.includes('film') || u.includes('movie')) return 'fa-film';
+            if (u.includes('docs.google.com/spreadsheets')) return 'fa-file-excel';
+            return 'fa-link';
+        }
+
+        // Render Link Bookmarks
+        const bookmarksGrid = document.getElementById('bookmarksGrid');
+        bookmarksData.forEach(bm => {
+            const isLink = bm.url.startsWith('http');
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            let btnHTML = isLink 
+                ? `<a href="${escapeHTML(bm.url)}" class="btn flow" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Link</a>`
+                : `<span class="btn gemini"><i class="fa-solid fa-keyboard"></i> ${escapeHTML(bm.url)}</span>`;
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <i class="${isLink ? 'fa-solid ' + getIcon(bm.url) : 'fa-solid fa-code'}"></i>
+                    <h3>${escapeHTML(bm.title)}</h3>
+                </div>
+                <div class="links-container">
+                    ${btnHTML}
+                </div>
+            `;
+            bookmarksGrid.appendChild(card);
+        });
+
+        // Copy Text & Toast Notification
+        function copyText(buttonElement, text) {
+            // Unescape the HTML before copying to clipboard
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text; // Decodes HTML entities
+            const decodedText = textarea.value;
+
+            navigator.clipboard.writeText(decodedText).then(() => {
+                showToast();
+                // Visual feedback on button
+                const originalHTML = buttonElement.innerHTML;
+                buttonElement.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                buttonElement.style.color = '#4ade80';
+                buttonElement.style.borderColor = 'rgba(74, 222, 128, 0.4)';
+                
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalHTML;
+                    buttonElement.style = '';
+                }, 2000);
+            });
+        }
+
+        function showToast() {
+            var x = document.getElementById("toast");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+
+        // Search Functionality Across ALL Sections
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
             const cards = document.querySelectorAll('.card');
             const noResultsMsg = document.getElementById('noResults');
+            let hasVisibleCards = false;
 
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase().trim();
-                let hasVisibleCards = false;
-
-                cards.forEach(card => {
-                    const title = card.querySelector('h3').textContent.toLowerCase();
-                    // Optional: If you want to search link text too, you can use innerText of the card
-                    
-                    if (title.includes(searchTerm)) {
-                        card.style.display = 'flex';
-                        hasVisibleCards = true;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                if (!hasVisibleCards) {
-                    noResultsMsg.style.display = 'block';
+            cards.forEach(card => {
+                // Search against the title, and also the content/links inside the card
+                const textContent = card.innerText.toLowerCase();
+                
+                if (textContent.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    hasVisibleCards = true;
                 } else {
-                    noResultsMsg.style.display = 'none';
+                    card.style.display = 'none';
                 }
             });
+
+            if (!hasVisibleCards) {
+                noResultsMsg.style.display = 'block';
+            } else {
+                noResultsMsg.style.display = 'none';
+            }
         });
     </script>
 
